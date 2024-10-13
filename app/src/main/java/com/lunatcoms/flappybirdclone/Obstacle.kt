@@ -3,48 +3,61 @@ package com.lunatcoms.flappybirdclone
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Rect
+import kotlin.random.Random
+
 
 // Clase que representa un obstáculo usando imágenes
 class Obstacle(
     private val screenWidth: Float,
     private val screenHeight: Int,
-    private val gapHeight: Int, // Altura del hueco
-    private var xPosition: Float, // Posición X del obstáculo
-    private val topObstacleImage: Bitmap, // Imagen del obstáculo superior
-    private val bottomObstacleImage: Bitmap // Imagen del obstáculo inferior
+    private var gapHeight: Int, // Tamaño del hueco
+    private var xPosition: Float,  // Posición X del obstáculo
+    private val topObstacleImage: Bitmap, // Imagen del obstáculo superior (redimensionada)
+    private val bottomObstacleImage: Bitmap // Imagen del obstáculo inferior (redimensionada)
 ) {
-    private val topObstacleHeight: Int = (Math.random() * (screenHeight - gapHeight)).toInt()
-    private val bottomObstacleHeight: Int = screenHeight - topObstacleHeight - gapHeight
+    private val obstacleWidth: Int = topObstacleImage.width
+    private val obstacleHeight: Int = topObstacleImage.height
 
-    // Rectángulos que indican las posiciones de los obstáculos
-    val topRect = Rect(xPosition.toInt(), 0, xPosition.toInt() + topObstacleImage.width, topObstacleHeight)
-    val bottomRect = Rect(xPosition.toInt(), screenHeight - bottomObstacleHeight, xPosition.toInt() + bottomObstacleImage.width, screenHeight)
+    private var topObstacleY: Int // Posición Y del obstáculo superior
+    private var bottomObstacleY: Int // Posición Y del obstáculo inferior
 
-    // Método para mover los obstáculos hacia la izquierda
+    init {
+        // Generar una posición aleatoria para el obstáculo superior
+        //topObstacleY = (Math.random() * (screenHeight - gapHeight - obstacleHeight)).toInt()
+        topObstacleY = Random.nextInt(- obstacleHeight + (screenHeight-obstacleHeight-gapHeight),0)
+        bottomObstacleY = topObstacleY + obstacleHeight + gapHeight
+    }
+
+    // Método para mover los obstáculos
     fun update() {
-        xPosition -= 10 // Velocidad del obstáculo (ajustable)
-        topRect.offset(-10, 0)
-        bottomRect.offset(-10, 0)
+         val gapHeight = Random.nextInt(screenHeight / 8, screenHeight / 4)
 
-        // Si el obstáculo sale de la pantalla, lo reposicionamos
-        if (xPosition + topObstacleImage.width < -100) {
+        xPosition -= 10 // Velocidad del obstáculo (ajustable)
+
+        // Reposicionar el obstáculo si sale de la pantalla
+        if (xPosition + obstacleWidth < 0) {
             xPosition = screenWidth
-            val newTopHeight = (Math.random() * (screenHeight - gapHeight)).toInt()
-            val newBottomHeight = screenHeight - newTopHeight - gapHeight
-            topRect.set(xPosition.toInt(), 0, xPosition.toInt() + topObstacleImage.width, newTopHeight)
-            bottomRect.set(xPosition.toInt(), screenHeight - newBottomHeight, xPosition.toInt() + bottomObstacleImage.width, screenHeight)
+            // Generar una nueva posición Y para el obstáculo superior
+            //topObstacleY = (Math.random() * (screenHeight - gapHeight - obstacleHeight)).toInt()
+            //topObstacleY = - obstacleHeight + (screenHeight-obstacleHeight)
+            topObstacleY = Random.nextInt(- obstacleHeight + (screenHeight-obstacleHeight-gapHeight),0)
+            bottomObstacleY = topObstacleY + obstacleHeight + gapHeight
         }
     }
 
-    // Método para dibujar los obstáculos en el canvas usando imágenes
+    // Método para dibujar los obstáculos en el canvas
     fun draw(canvas: Canvas) {
-        canvas.drawBitmap(topObstacleImage, null, topRect, null)
-        canvas.drawBitmap(bottomObstacleImage, null, bottomRect, null)
+        canvas.drawBitmap(topObstacleImage, xPosition.toFloat(), topObstacleY.toFloat(), null)
+        canvas.drawBitmap(bottomObstacleImage, xPosition.toFloat(), bottomObstacleY.toFloat(), null)
     }
 
-    // Método para verificar si el personaje colisiona con los obstáculos
+    // Método para verificar colisiones
     fun checkCollision(character: Character): Boolean {
-        val characterRect = Rect(character.x.toInt(), character.y.toInt(), (character.x + character.image.width).toInt(), (character.y + character.image.height).toInt())
+        val characterRect = Rect(character.x.toInt(), character.y.toInt(), character.x.toInt() + character.image.width, character.y.toInt() + character.image.height)
+        val topRect = Rect(xPosition.toInt(), topObstacleY, xPosition.toInt() + obstacleWidth, topObstacleY + obstacleHeight)
+        val bottomRect = Rect(xPosition.toInt(), bottomObstacleY, xPosition.toInt() + obstacleWidth, bottomObstacleY + obstacleHeight)
+
         return Rect.intersects(characterRect, topRect) || Rect.intersects(characterRect, bottomRect)
     }
 }
+

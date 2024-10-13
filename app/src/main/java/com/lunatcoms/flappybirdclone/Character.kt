@@ -13,7 +13,7 @@ class Character(
 ) {
     var velocityY = 0 // Velocidad vertical del personaje
     private val gravity = 3 // Constante de gravedad (puedes ajustarla)
-    private val jumpForce = -40 // Fuerza del salto (puedes ajustarla)
+    var jumpForce = -40 // Fuerza del salto (puedes ajustarla)
     //private val groundLevel: Int = y // Nivel del suelo (posición Y máxima)
 
     // Método que actualiza la posición del personaje
@@ -49,6 +49,6 @@ class Character(
 
     // Método para dibujar el personaje en el Canvas
     fun draw(canvas: Canvas) {
-        canvas.drawBitmap(image, x.toFloat(), y.toFloat(), null)
+        canvas.drawBitmap(image, x, y, null)
     }
 }
