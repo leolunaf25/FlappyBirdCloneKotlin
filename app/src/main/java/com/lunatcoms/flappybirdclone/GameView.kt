@@ -34,7 +34,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         val screenHeight = displayMetrics.heightPixels
 
         // Configuración del fondo y el personaje
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game2)
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game)
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight, false)
 
         background1 = Background(scaledBitmap, 0, 0)
@@ -54,19 +54,23 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         // Inicialización de obstáculos (igual que antes)
         val topObstacleImage = BitmapFactory.decodeResource(resources, R.drawable.top_pipe)
         val bottomObstacleImage = BitmapFactory.decodeResource(resources, R.drawable.bottom_pipe)
+
+        val gapHeight = Random.nextInt(screenHeight / 5, screenHeight / 3)
+        val gap = BitmapFactory.decodeResource(resources, R.drawable.bird_main)
+
         val scaledTopObstacle = Bitmap.createScaledBitmap(
             topObstacleImage,
             topObstacleImage.width,
-            (screenHeight * .7).toInt(),
+            (screenHeight * .6).toInt(),
             false
         )
         val scaledBottomObstacle = Bitmap.createScaledBitmap(
             bottomObstacleImage,
             bottomObstacleImage.width,
-            (screenHeight * .7).toInt(),
+            (screenHeight * .6).toInt(),
             false
         )
-        val gapHeight = Random.nextInt(screenHeight / 10, screenHeight / 3)
+
         obstacles.add(
             Obstacle(
                 screenWidth.toFloat(),
@@ -74,7 +78,20 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
                 gapHeight,
                 screenWidth.toFloat(),
                 scaledTopObstacle,
-                scaledBottomObstacle
+                scaledBottomObstacle,
+                gap
+            )
+        )
+
+        obstacles.add(
+            Obstacle(
+                screenWidth.toFloat(),
+                screenHeight,
+                gapHeight,
+                screenWidth + (screenWidth * 0.55F),
+                scaledTopObstacle,
+                scaledBottomObstacle,
+                gap
             )
         )
     }
@@ -106,6 +123,12 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         character.update()
         for (obstacle in obstacles) {
             obstacle.update()
+
+            if (obstacle.chekPoint(character) && !obstacle.hasBeenPassed){
+                (context as MainActivity).highScore()
+                obstacle.markAsPassed()
+            }
+
             if (obstacle.checkCollision(character)) {
                 isGameOver = true
                 character.velocityY = 0 // El personaje deja de saltar
@@ -115,6 +138,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
                 (context as MainActivity).showGameOverButtons()
                 break
             }
+
         }
     }
 

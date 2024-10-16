@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var gameView: GameView
+    private var scorePoints: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,10 +23,13 @@ class MainActivity : AppCompatActivity() {
         val restartButton = findViewById<ImageView>(R.id.btnRestart)
         val exitButton = findViewById<ImageView>(R.id.btnExit)
 
+
         // Configurar los listeners de los botones
         restartButton.setOnClickListener {
             Toast.makeText(this, "Reiniciar", Toast.LENGTH_SHORT).show()
             // Aquí puedes implementar la lógica para reiniciar el juego
+            gameView.pause()
+            recreate()
         }
 
         exitButton.setOnClickListener {
@@ -49,6 +55,14 @@ class MainActivity : AppCompatActivity() {
 
             restartButton.visibility = View.VISIBLE
             exitButton.visibility = View.VISIBLE
+        }
+    }
+
+    fun highScore(){
+        var score = findViewById<TextView>(R.id.tvScore)
+        runOnUiThread {
+            scorePoints++
+            score.text = scorePoints.toString()
         }
     }
 
