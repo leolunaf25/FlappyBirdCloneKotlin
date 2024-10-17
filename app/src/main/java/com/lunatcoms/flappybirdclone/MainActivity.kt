@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,14 +20,16 @@ class MainActivity : AppCompatActivity() {
 
         gameView = findViewById<GameView>(R.id.gameView)
 
+
         // Obtener los botones
         val restartButton = findViewById<ImageView>(R.id.btnRestart)
         val exitButton = findViewById<ImageView>(R.id.btnExit)
 
+        val maxScore = findViewById<TextView>(R.id.tvMaxScore)
+        maxScore.text = getHighScore().toString()
 
         // Configurar los listeners de los botones
         restartButton.setOnClickListener {
-            Toast.makeText(this, "Reiniciar", Toast.LENGTH_SHORT).show()
             // Aquí puedes implementar la lógica para reiniciar el juego
             gameView.pause()
             recreate()
@@ -35,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         exitButton.setOnClickListener {
             Toast.makeText(this, "Salir", Toast.LENGTH_SHORT).show()
             // Aquí puedes implementar la lógica para salir del juego
+            finishAffinity()
+            exitProcess(0)
+            //finish()  // Cierra la actividad actual y regresa a la anterior
+
         }
     }
 
@@ -60,10 +67,31 @@ class MainActivity : AppCompatActivity() {
 
     fun highScore(){
         var score = findViewById<TextView>(R.id.tvScore)
+        scorePoints++
+
         runOnUiThread {
-            scorePoints++
             score.text = scorePoints.toString()
         }
+
+        if (scorePoints > getHighScore()) {
+            saveHighScore(scorePoints)
+        }
+
     }
+
+    fun saveHighScore(score: Int) {
+        val sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt("high_score", score)
+        editor.apply()
+    }
+
+    fun getHighScore(): Int {
+        val sharedPreferences = getSharedPreferences("game_prefs", MODE_PRIVATE)
+        return sharedPreferences.getInt("high_score", 0)
+    }
+
+
+
 
 }

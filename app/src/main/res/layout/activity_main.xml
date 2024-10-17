@@ -28,6 +28,24 @@
         android:textSize="55sp"
         android:layout_marginTop="22dp"
         />
+    <TextView
+        android:id="@+id/tvMaxScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="0"
+        android:textSize="55sp"
+        android:layout_marginTop="22dp"
+        />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btnRestart"
@@ -36,10 +54,8 @@
         android:src="@drawable/ic_refresh"
         android:visibility="gone"
         android:background="@drawable/reset"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="25dp"
+        />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btnExit"
@@ -48,9 +64,10 @@
         android:src="@drawable/ic_exit"
         android:visibility="gone"
         android:background="@drawable/reset"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRestart" />
+        android:layout_marginBottom="100dp"
+ />
+</LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
