@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="whiteOne">#00FFFFFF</color>
 
+    <color name="whiteTwo">#BFFFFFFF</color>
+
 </resources>
