@@ -28,11 +28,11 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         val screenHeight = displayMetrics.heightPixels
 
         // Configuración del fondo y el personaje
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game)
-        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, screenWidth, screenHeight, false)
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game2)
+        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, screenHeight, false)
 
         background1 = Background(scaledBitmap, 0, 0)
-        background2 = Background(scaledBitmap, screenWidth, 0)
+        background2 = Background(scaledBitmap, background1.image.width, 0)
 
         val characterBitmap = BitmapFactory.decodeResource(resources, R.drawable.bird_main)
         val scaledCharacter =
