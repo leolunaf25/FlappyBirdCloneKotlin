@@ -1,10 +1,13 @@
 package com.lunatcoms.flappybirdclone
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.lunatcoms.flappybirdclone.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,8 +22,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gameView = findViewById<GameView>(R.id.gameView)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+        }
 
+        gameView = findViewById<GameView>(R.id.gameView)
 
         // Obtener los botones
         val restartButton = findViewById<ImageView>(R.id.btnRestart)
@@ -59,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun highScore(){
+    fun highScore() {
         var score = findViewById<TextView>(R.id.tvScore)
         scorePoints++
 
@@ -72,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updatePoints(){
+    private fun updatePoints() {
         runOnUiThread {
             binding.tvRecord.text = getHighScore().toString()
             binding.tvScoreBoard.text = scorePoints.toString()

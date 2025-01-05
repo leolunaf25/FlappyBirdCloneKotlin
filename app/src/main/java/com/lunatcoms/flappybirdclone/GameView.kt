@@ -28,7 +28,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         val screenHeight = displayMetrics.heightPixels
 
         // Configuración del fondo y el personaje
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game2)
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.background_game)
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, screenHeight, false)
 
         background1 = Background(scaledBitmap, 0, 0)
@@ -50,7 +50,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         val bottomObstacleImage = BitmapFactory.decodeResource(resources, R.drawable.bottom_pipe)
 
         val gapHeight = Random.nextInt(screenHeight / 5, screenHeight / 3)
-        val gap = BitmapFactory.decodeResource(resources, R.drawable.bird_main)
+        val gap = BitmapFactory.decodeResource(resources, R.drawable.gap)
 
         val scaledTopObstacle = Bitmap.createScaledBitmap(
             topObstacleImage,

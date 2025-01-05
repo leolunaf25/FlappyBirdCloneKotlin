@@ -6,4 +6,8 @@
 
     <color name="whiteTwo">#BFFFFFFF</color>
 
+    <color name="backgroundSky">#4ec0ca</color>
+
+    <color name="backgroundSkyInGame">#71c5cf</color>
+
 </resources>
